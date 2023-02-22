@@ -1,0 +1,802 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>TeamViewer IoT SDK for Python &#8212; TeamViewer IoT SDK for Python v 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="teamviewer-iot-sdk-for-python">
+<h1>TeamViewer IoT SDK for Python<a class="headerlink" href="#teamviewer-iot-sdk-for-python" title="Permalink to this headline">¶</a></h1>
+<p>This documentation describes the use of TeamViewer IoT SDK for connecting and pushing data to TeamViewer
+IoT Agent using python.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#id1">Getting started</a></li>
+<li><dl class="first docutils">
+<dt><a class="reference internal" href="#id2">Use the SDK</a></dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt><a class="reference internal" href="#client">Client</a></dt>
+<dd><ul class="first last">
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#id4">Provisioning / Deprovisioning</a></li>
+<li><a class="reference internal" href="#id5">Connecting / Disconnecting</a></li>
+<li><dl class="first docutils">
+<dt><a class="reference internal" href="#id6">Preparing data for publishing</a></dt>
+<dd><ul class="first last">
+<li><a class="reference internal" href="#sensor">Sensor</a></li>
+<li><a class="reference internal" href="#metric">Metric</a></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><a class="reference internal" href="#id7">Pushing data to TeamViewer IoT Agent</a></li>
+<li><a class="reference internal" href="#callbacks">Callbacks</a></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><a class="reference internal" href="#id9">License</a></li>
+<li><a class="reference internal" href="#support">Support</a></li>
+</ul>
+<div class="section" id="getting-started">
+<span id="id1"></span><h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<p>1: Python version &gt;= 3.0</p>
+<p>To check your Python version please run the following command:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python --version
+</pre></div>
+</div>
+<p>2: <a class="reference external" href="https://community.teamviewer.com/t5/TeamViewer-IoT-Knowledge-Base/Install-TeamViewer-IoT-Agent/ta-p/17084">TV IoT Agent up and running</a></p>
+<p>3: Some of these libs can be asked to install:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">sudo apt-get update</div>
+<div class="line">sudo apt-get install python3-pip</div>
+<div class="line">sudo apt-get install unzip</div>
+<div class="line">sudo apt-get install python3-setuptools</div>
+<div class="line">pip install –upgrade setuptools</div>
+<div class="line">sudo apt-get install libffi-dev</div>
+<div class="line">sudo apt-get install libssl-dev</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="step-1">
+<h3>Step 1<a class="headerlink" href="#step-1" title="Permalink to this headline">¶</a></h3>
+<p>Download Python SDK from S3</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>wget http://download.teamviewer-iot.com/sdks/python/v1.0.1/teamviewer_iot_python_sdk-1.0.1-py3-none-any.whl
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-2">
+<h3>Step 2<a class="headerlink" href="#step-2" title="Permalink to this headline">¶</a></h3>
+<p>Install SDK</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip3 install  teamviewer_iot_python_sdk-1.0.1-py3-none-any.whl
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-3">
+<h3>Step 3<a class="headerlink" href="#step-3" title="Permalink to this headline">¶</a></h3>
+<p>Unzip package if you want to check docs and examples:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>unzip teamviewer_iot_python_sdk-1.0.1-py3-none-any.whl -d teamviewer_iot_python_sdk
+<span class="nb">cd</span> teamviewer_iot_python_sdk
+python3 ./examples/create_metric.py
+</pre></div>
+</div>
+<p>Find examples and docs under the extracted folder.</p>
+</div>
+</div>
+<div class="section" id="use-the-sdk">
+<span id="id2"></span><h2>Use the SDK<a class="headerlink" href="#use-the-sdk" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="client">
+<h3>Client<a class="headerlink" href="#client" title="Permalink to this headline">¶</a></h3>
+<p>The client is the main class used to establish an asynchronous connection to push data to TeamViewer IoT Agent.</p>
+</div>
+<div class="section" id="constructor">
+<span id="id3"></span><h3>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="tvcmi-client">
+<h4>TVCMI_client()<a class="headerlink" href="#tvcmi-client" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TVCMI_client</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">user_data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The constructor takes the following arguments:</p>
+<p><strong>- parameters</strong></p>
+<p>Can either be a JSON or a config file. For both of the options the following fields must be initialized.</p>
+<div class="line-block">
+<div class="line"><strong>MqttHost</strong> - <em>The host name</em>. <em>As of now only ‘localhost’ is supported</em>.</div>
+<div class="line"><strong>MqttProvisionPort</strong> - <em>Insecure port for certificate exchange</em>.</div>
+<div class="line"><strong>MqttPort</strong> - <em>Secure port for establishing a TLS connection</em>.</div>
+<div class="line"><strong>MqttKeepAlive</strong> - <em>Currently ignored</em></div>
+<div class="line"><strong>CaFile</strong> - <em>CA provided by TeamViewer Iot Agent</em>. <em>The default location is: /var/lib/teamviewer-iot-agent/certs/TeamViewerAuthority.crt</em></div>
+<div class="line"><strong>CertFolder</strong> - <em>Folder where the certificate signing request, private key and authorized certificates will be stored</em>.</div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">Example of a config file:</div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MqttHost</span>             <span class="n">localhost</span>
+<span class="n">MqttProvisionPort</span>    <span class="mi">18883</span>
+<span class="n">MqttPort</span>             <span class="mi">18884</span>
+<span class="n">MqttKeepAlive</span>        <span class="mi">60</span>
+<span class="n">CaFile</span>               <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">teamviewer</span><span class="o">-</span><span class="n">iot</span><span class="o">-</span><span class="n">agent</span><span class="o">/</span><span class="n">certs</span><span class="o">/</span><span class="n">TeamViewerAuthority</span><span class="o">.</span><span class="n">crt</span>
+<span class="n">CertFolder</span>           <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">pi</span><span class="o">/</span><span class="n">Downloads</span><span class="o">/</span><span class="n">certs</span>
+</pre></div>
+</div>
+<p><strong>- user_data</strong></p>
+<p>User defined data that will be passed to the user through the callbacks functions.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">TeamViewerIoTPythonSDK.TVCMI_client</span> <span class="kn">as</span> <span class="nn">TVCMI_client</span>
+<span class="kn">import</span> <span class="nn">TeamViewerIoTPythonSDK.TVCMI_error</span> <span class="kn">as</span> <span class="nn">Error</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+
+<span class="c1"># Obtaining the path of the file</span>
+<span class="n">dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="c1"># Choosing the location for the folder that stores the key and certificate</span>
+<span class="n">cert_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_path</span><span class="p">,</span> <span class="s2">&quot;../certs&quot;</span><span class="p">)</span>
+
+<span class="c1"># putting connection parameters in JSON</span>
+<span class="n">connection_parameters</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">connection_parameters</span><span class="p">[</span><span class="s1">&#39;MqttHost&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;localhost&#39;</span>
+<span class="n">connection_parameters</span><span class="p">[</span><span class="s1">&#39;MqttProvisionPort&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;18883&#39;</span>
+<span class="n">connection_parameters</span><span class="p">[</span><span class="s1">&#39;MqttPort&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;18884&#39;</span>
+<span class="n">connection_parameters</span><span class="p">[</span><span class="s1">&#39;MqttKeepAlive&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span>
+<span class="n">connection_parameters</span><span class="p">[</span><span class="s1">&#39;CaFile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;/var/lib/teamviewer-iot-agent/certs/TeamViewerAuthority.crt&#39;</span>
+<span class="n">connection_parameters</span><span class="p">[</span><span class="s1">&#39;CertFolder&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cert_path</span>
+<span class="n">connector_params</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">connection_parameters</span><span class="p">)</span>
+
+<span class="c1"># Creating a new client to connect to TeamViewer IoT Agent</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">TVCMI_client</span><span class="p">(</span><span class="n">connector_params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="set-user-data">
+<h4>set_user_data()<a class="headerlink" href="#set-user-data" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">set_user_data</span><span class="p">(</span><span class="n">user_data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If user_data is not set when initializing the constructor, it can be set later through set_user_data function.
+The function takes the following arguments.</p>
+<p><strong>- user_data</strong></p>
+<p>User defined data that will be passed to the user through all the callbacks functions.</p>
+</div>
+</div>
+<div class="section" id="provisioning-deprovisioning">
+<span id="id4"></span><h3>Provisioning / Deprovisioning<a class="headerlink" href="#provisioning-deprovisioning" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="provision">
+<h4>provision()<a class="headerlink" href="#provision" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">provision</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Checks for a private key and an authorized certificate in the CertFolder location passed to the
+constructor. If key and certificate are not found in the folder, this function call will create a private key,
+certificate signing request and will insecurely connect to TeamViewer IoT Agent to obtain an authorized certificate.
+You must wait until the callback function is called to make sure the function finished its execution
+successfully.</p>
+<p><strong>- Callbacks</strong></p>
+<blockquote>
+<div><p><a class="reference internal" href="#on-api-response">on_api_response()</a></p>
+<div class="line-block">
+<div class="line">Success message: “Client is successfully provisioned.”</div>
+<div class="line">Success message: “Client is already provisioned.”</div>
+<div class="line"><br /></div>
+<div class="line"><a class="reference internal" href="#on-api-error">on_api_error()</a></div>
+<div class="line">Error message: “Error writing the certificate to file.”</div>
+<div class="line">Error code: IOError.errno</div>
+<div class="line"><br /></div>
+<div class="line"><a class="reference internal" href="#on-api-log">on_api_log()</a></div>
+<div class="line">Message: Log messages generated during execution.</div>
+</div>
+</div></blockquote>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Callback to be called when authorized certificate on provisioning is received</span>
+<span class="k">def</span> <span class="nf">on_certificate_received</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># Obtaining the response message</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;msg&#39;</span><span class="p">)</span>
+
+<span class="c1"># Setting a callback to receive an authorized certificate if the client is not provisioned</span>
+<span class="n">client</span><span class="o">.</span><span class="n">on_api_response</span> <span class="o">=</span> <span class="n">on_certificate_received</span>
+<span class="c1"># Setting a callback for errors</span>
+<span class="n">client</span><span class="o">.</span><span class="n">on_api_error</span> <span class="o">=</span> <span class="n">on_error</span>
+
+<span class="c1"># Provisioning the client</span>
+<span class="n">client</span><span class="o">.</span><span class="n">provision</span><span class="p">()</span>
+
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="deprovision">
+<h4>deprovision()<a class="headerlink" href="#deprovision" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">deprovision</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Deprovisions the client and deletes all the data associated with it. After this step no updates
+can be made to the client.</p>
+</div>
+</div>
+<div class="section" id="connecting-disconnecting">
+<span id="id5"></span><h3>Connecting / Disconnecting<a class="headerlink" href="#connecting-disconnecting" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="connect-api">
+<h4>connect_api()<a class="headerlink" href="#connect-api" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">connect_api</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Establishes a secure connection with TeamViewer IoT Agent. Must be called after the client
+is provisioned.</p>
+<p><strong>- Callbacks</strong></p>
+<blockquote>
+<div><a class="reference internal" href="#on-api-connect">on_api_connect()</a></div></blockquote>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">TeamViewerIoTPythonSDK.TVCMI_client</span> <span class="kn">as</span> <span class="nn">TVCMI_client</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c1"># Callback to be called when connecting securely</span>
+<span class="k">def</span> <span class="nf">on_connect</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Secure connection is established.&quot;</span><span class="p">)</span>
+    <span class="c1"># Setting the flag</span>
+    <span class="k">global</span> <span class="n">secure_connection_established</span>
+    <span class="n">secure_connection_established</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="c1"># Flags to wait for API response</span>
+<span class="n">secure_connection_established</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="c1"># Setting the callback to know when connected</span>
+<span class="n">client</span><span class="o">.</span><span class="n">on_api_connect</span> <span class="o">=</span> <span class="n">on_connect</span>
+
+<span class="c1"># Establishing a secure connection with TeamViewer IoT Agent</span>
+<span class="n">client</span><span class="o">.</span><span class="n">connect_api</span><span class="p">()</span>
+
+<span class="c1"># Waiting to connect securely</span>
+<span class="k">while</span> <span class="n">secure_connection_established</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="disconnect-api">
+<h4>disconnect_api()<a class="headerlink" href="#disconnect-api" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">disconnect_api</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Disconnects the client.</p>
+<p><strong>- Callbacks</strong></p>
+<blockquote>
+<div><a class="reference internal" href="#on-api-disconnect">on_api_disconnect()</a></div></blockquote>
+</div>
+<div class="section" id="check-connection">
+<h4>check_connection()<a class="headerlink" href="#check-connection" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">check_connection</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Checks if the connection with TeamViewer IoT Agent is alive.</p>
+<p><strong>- Callbacks</strong></p>
+<blockquote>
+<div><p><a class="reference internal" href="#on-api-response">on_api_response()</a></p>
+<p>Message: {“request”: “Ping”}</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="preparing-data-for-publishing">
+<span id="id6"></span><h3>Preparing data for publishing<a class="headerlink" href="#preparing-data-for-publishing" title="Permalink to this headline">¶</a></h3>
+<p>Before the data can be published to TeamViewer IoT Agent, it needs to be formated according to
+the data model used by <a href="#id10"><span class="problematic" id="id11">`TeamViewer IoT Agent`_</span></a> . Sensor and metric must be created to
+respectively group and describe the data pushed to TeamViewer IoT Agent.</p>
+</div>
+<div class="section" id="sensor">
+<h3>Sensor<a class="headerlink" href="#sensor" title="Permalink to this headline">¶</a></h3>
+<p>Sensor is a logical unit that allows to group one or more metrics for pushing data to
+TeamViewer IoT. It is recommended to update all metrics that belong to the same sensor
+simultaneously to ensure that the data arrives with the same timestamp, so that it is
+better processed by rule engines.</p>
+<div class="section" id="create-sensor">
+<h4>create_sensor()<a class="headerlink" href="#create-sensor" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">create_sensor</span><span class="p">(</span><span class="n">sensor_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Creates a sensor with the passed name. You must wait for the callback to obtain and save the sensor ID.
+The sensor ID will be used to later identify the sensor. The parameters for the function are:</p>
+<p><strong>- sensor_name</strong></p>
+<p>The name of the sensor.</p>
+<p><strong>- Callbacks</strong></p>
+<blockquote>
+<div><p><a class="reference internal" href="#on-api-response">on_api_response()</a></p>
+<p>Message: {“name”: “SensorName”, ” sensorId”:”d4170d999b9240a5863df622aad9fc4a”}</p>
+</div></blockquote>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">TeamViewerIoTPythonSDK.TVCMI_client</span> <span class="kn">as</span> <span class="nn">TVCMI_client</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c1"># Callback to be called when sensor is created</span>
+<span class="k">def</span> <span class="nf">on_sensor_created</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Sensor is created.&quot;</span><span class="p">)</span>
+    <span class="c1"># Retrieving the message received</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;msg&#39;</span><span class="p">)</span>
+    <span class="c1"># Loading the message into a JSON</span>
+    <span class="n">message_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Retrieving the sensor id</span>
+    <span class="k">global</span> <span class="n">sensor_id</span>
+    <span class="n">sensor_id</span> <span class="o">=</span> <span class="n">message_json</span><span class="p">[</span><span class="s1">&#39;sensorId&#39;</span><span class="p">]</span>
+    <span class="c1"># Setting the flag</span>
+    <span class="k">global</span> <span class="n">sensor_created</span>
+    <span class="n">sensor_created</span> <span class="o">=</span> <span class="bp">True</span>
+
+
+<span class="n">sensor_created</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="c1"># Setting the callback to receive the sensor ID</span>
+<span class="n">client</span><span class="o">.</span><span class="n">on_api_response</span> <span class="o">=</span> <span class="n">on_sensor_created</span>
+<span class="c1"># Create a sensor</span>
+<span class="n">client</span><span class="o">.</span><span class="n">create_sensor</span><span class="p">(</span><span class="s2">&quot;sensor_name&quot;</span><span class="p">)</span>
+
+<span class="c1"># Waiting for create sensor to finish</span>
+<span class="k">while</span> <span class="n">sensor_created</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="update-sensor-description">
+<h4>update_sensor_description()<a class="headerlink" href="#update-sensor-description" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">update_sensor_description</span><span class="p">(</span><span class="n">sensor_id</span><span class="p">,</span> <span class="n">sensor_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Updates the description of the sensor. The function parameters are:</p>
+<p><strong>- sensor_id</strong></p>
+<p>The sensor ID obtained when creating the sensor.</p>
+<p><strong>- sensor_name</strong></p>
+<p>The name of the sensor.</p>
+<p><strong>- Callbacks</strong></p>
+<blockquote>
+<div><p><a class="reference internal" href="#on-api-response">on_api_response()</a></p>
+<div class="line-block">
+<div class="line">Success message: {“Datasource Changed”}</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="list-sensors">
+<h4>list_sensors()<a class="headerlink" href="#list-sensors" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">list_sensors</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Returns a JSON object listing the metadata of all registered sensors and their metric IDs
+of the specific client through the message field of the callback function .</p>
+<p><strong>- Callbacks</strong></p>
+<blockquote>
+<div><p><a class="reference internal" href="#on-api-response">on_api_response()</a></p>
+<p>Example message:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="p">{</span>
+    <span class="s2">&quot;metrics&quot;</span> <span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;link&quot;</span> <span class="p">:</span> <span class="s2">&quot;/v1.0/c7721a37a2224a0bae22b8ef38e4de80/sensor/6b7b3daad85a41f4bb69a942233b06ae/metric/0cbe4587c32644e0bf84180bf919cc51/inventory&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metricId&quot;</span> <span class="p">:</span> <span class="s2">&quot;0cbe4587c32644e0bf84180bf919cc51&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;link&quot;</span> <span class="p">:</span> <span class="s2">&quot;/v1.0/c7721a37a2224a0bae22b8ef38e4de80/sensor/6b7b3daad85a41f4bb69a942233b06ae/metric/639847246b5d45b8b759d01035c0b0a9/inventory&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metricId&quot;</span> <span class="p">:</span> <span class="s2">&quot;639847246b5d45b8b759d01035c0b0a9&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;link&quot;</span> <span class="p">:</span> <span class="s2">&quot;/v1.0/c7721a37a2224a0bae22b8ef38e4de80/sensor/6b7b3daad85a41f4bb69a942233b06ae/metric/7583b1d004604b18b9f7afd934a0528c/inventory&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metricId&quot;</span> <span class="p">:</span> <span class="s2">&quot;7583b1d004604b18b9f7afd934a0528c&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;link&quot;</span> <span class="p">:</span> <span class="s2">&quot;/v1.0/c7721a37a2224a0bae22b8ef38e4de80/sensor/6b7b3daad85a41f4bb69a942233b06ae/metric/7a75dfa08e014319828dac57e7f65c66/inventory&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metricId&quot;</span> <span class="p">:</span> <span class="s2">&quot;7a75dfa08e014319828dac57e7f65c66&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;link&quot;</span> <span class="p">:</span> <span class="s2">&quot;/v1.0/c7721a37a2224a0bae22b8ef38e4de80/sensor/6b7b3daad85a41f4bb69a942233b06ae/metric/b41e4458b7254419aaa079af07447d34/inventory&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metricId&quot;</span> <span class="p">:</span> <span class="s2">&quot;b41e4458b7254419aaa079af07447d34&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;link&quot;</span> <span class="p">:</span> <span class="s2">&quot;/v1.0/c7721a37a2224a0bae22b8ef38e4de80/sensor/6b7b3daad85a41f4bb69a942233b06ae/metric/e3234e29aa1142c28b9e5e4b7b7cef4e/inventory&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metricId&quot;</span> <span class="p">:</span> <span class="s2">&quot;e3234e29aa1142c28b9e5e4b7b7cef4e&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;unispeed6&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sensorId&quot;</span> <span class="p">:</span> <span class="s2">&quot;6b7b3daad85a41f4bb69a942233b06ae&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;store&quot;</span> <span class="p">:</span> <span class="n">true</span>
+<span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="delete-sensor-sensor-id">
+<h4>delete_sensor(sensor_id)<a class="headerlink" href="#delete-sensor-sensor-id" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">delete_sensor</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Deletes the sensor and all the data associated with it. After this action no updates can be made
+to the sensor. The function parameters are:</p>
+<p><strong>- sensor_id</strong></p>
+<p>The sensor ID obtained when creating the sensor.</p>
+<p><strong>- Callbacks</strong></p>
+<blockquote>
+<div><a class="reference internal" href="#on-api-response">on_api_response()</a>
+Message: {“Sensor was deleted”}</div></blockquote>
+</div>
+</div>
+<div class="section" id="metric">
+<h3>Metric<a class="headerlink" href="#metric" title="Permalink to this headline">¶</a></h3>
+<p>Metric is the container of the actual value which is pushed to TeamViewer IoT.
+Metrics must belong to a sensor and can’t exist independently.</p>
+<p>create_metric()</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">create_metric</span><span class="p">(</span><span class="n">metric_def</span><span class="p">,</span> <span class="n">sensor_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Creates a metric describing the data to be published to TeamViewer IoT Agent. You must wait
+for the callback to obtain and save the metric ID.
+The metric ID will be used to later identify the metric. One or more metrics can be created
+simultaneously. The parameters for the function are:</p>
+<p><strong>- metric_def</strong></p>
+<p>The message definition must contain the necessary metadata for the metrics in JSON format,
+which can be defined in two ways:</p>
+<p><em>Definition over predefined units of values:</em></p>
+<p>When defining a metric with a unit of value that is already defined in the valueUnit table
+below, the following fields must be present in the JSON message: matchingId, valueUnit, and
+the name of the metric.</p>
+<p><em>Definition over custom defined unit of values:</em></p>
+<p>When defining a metric with a custom unit of value, the following fields must be present in
+the JSON message: matchingId, valueType, name and valueAnnotation. This way of defining a
+metric gives a complete flexibility in what kind of data you want to push to TeamViewer IoT.</p>
+<p><em>metrics:</em> Array - Lists the definitions of all metric objects to be registered.</p>
+<p><em>matchingId:</em> String - Used to match the ID-s with metrics.</p>
+<p><em>name:</em> String - Name of the metric.</p>
+<p><em>valueUnit:</em> String     - Definition of the unit of value of the metric. Predefined valid units are:</p>
+<div class="line-block">
+<div class="line">SI.ElectricCurrent.AMPERE</div>
+<div class="line">SI.DataAmount.BIT</div>
+<div class="line">SI.Temperature.CELSIUS</div>
+<div class="line">SI.ElectricCapacitance.FARAD</div>
+<div class="line">SI.Mass.GRAM</div>
+<div class="line">SI.Frequency.HERTZ</div>
+<div class="line">SI_Energy_JOULE</div>
+<div class="line">SI.Length.METER</div>
+<div class="line">SI.Velocity.METERS_PER_SECOND</div>
+<div class="line">SI.AmountOfSubstance.MOLE</div>
+<div class="line">SI.Force.NEWTON</div>
+<div class="line">SI.ElectricResistance.OHM</div>
+<div class="line">SI.Pressure.PASCAL</div>
+<div class="line">SI.Angle.RADIAN</div>
+<div class="line">SI.Duration.SECOND</div>
+<div class="line">SI.Area.SQUARE_METRE</div>
+<div class="line">SI.ElectricPotential.VOLT</div>
+<div class="line">SI.Power.WATT</div>
+<div class="line">SI.LuminousIntensity.CANDELA</div>
+<div class="line">SI.Acceleration.METERS_PER_SQUARE_SECOND</div>
+<div class="line">NoSI.Dimensionless.PERCENT</div>
+<div class="line">NoSI.Dimensionless.DECIBEL</div>
+</div>
+<p><em>valueAnnotation:</em> String - Optional field to define a custom unit for metric values.</p>
+<p><em>valueType:</em> String     - Defines the type of the custom defined unit. Valid entries are:</p>
+<div class="line-block">
+<div class="line">bool</div>
+<div class="line">string</div>
+<div class="line">double</div>
+<div class="line">integer</div>
+</div>
+<p><strong>- sensor_id</strong></p>
+<p>The sensor ID obtained when creating the sensor.</p>
+<p><strong>- Callbacks</strong></p>
+<blockquote>
+<div><a class="reference internal" href="#on-api-response">on_api_response()</a></div></blockquote>
+<p>Example message:</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">TeamViewerIoTPythonSDK.TVCMI_client</span> <span class="kn">as</span> <span class="nn">TVCMI_client</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># Callback to be called when metric is created</span>
+<span class="k">def</span> <span class="nf">on_metric_created</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Metrics are created.&quot;</span><span class="p">)</span>
+    <span class="c1"># Retrieving the message received</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;msg&#39;</span><span class="p">)</span>
+    <span class="c1"># Loading the message into a JSON</span>
+    <span class="n">metric_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Retrieving the sensor id</span>
+    <span class="k">global</span> <span class="n">metric1_id</span>
+    <span class="n">metric1_id</span> <span class="o">=</span> <span class="n">metric_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;metricId&quot;</span><span class="p">]</span>
+
+    <span class="k">global</span> <span class="n">metric2_id</span>
+    <span class="n">metric2_id</span> <span class="o">=</span> <span class="n">metric_data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;metricId&quot;</span><span class="p">]</span>
+    <span class="c1"># Setting the flag</span>
+    <span class="k">global</span> <span class="n">metrics_created</span>
+    <span class="n">metrics_created</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="n">metrics_created</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="c1"># Setting the callback to receive the sensor ID</span>
+<span class="n">client</span><span class="o">.</span><span class="n">on_api_response</span> <span class="o">=</span> <span class="n">on_metric_created</span>
+
+<span class="c1"># Defining metric 1</span>
+<span class="n">metric1_parameters</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">metric1_parameters</span><span class="p">[</span><span class="s1">&#39;matchingId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">metric1_parameters</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;metric1_name&#39;</span>
+<span class="n">metric1_parameters</span><span class="p">[</span><span class="s1">&#39;valueAnnotation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;your_value_unit_for_metric1&#39;</span>
+<span class="n">metric1_parameters</span><span class="p">[</span><span class="s1">&#39;valueType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;string&#39;</span>
+
+<span class="n">metric1_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">metric1_parameters</span><span class="p">)</span>
+
+<span class="c1"># Defining metric 2</span>
+<span class="n">metric2_parameters</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">metric2_parameters</span><span class="p">[</span><span class="s1">&#39;matchingId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">metric2_parameters</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;metric2_name&#39;</span>
+<span class="n">metric2_parameters</span><span class="p">[</span><span class="s1">&#39;valueAnnotation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;your_value_unit_for_metric2&#39;</span>
+<span class="n">metric2_parameters</span><span class="p">[</span><span class="s1">&#39;valueType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;integer&#39;</span>
+
+<span class="n">metric2_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">metric2_parameters</span><span class="p">)</span>
+
+<span class="c1"># putting metric 1 and metric 2 into a single container</span>
+<span class="n">metrics_container</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">metrics_container</span><span class="p">[</span><span class="s1">&#39;metrics&#39;</span><span class="p">]</span><span class="o">=</span> <span class="p">[</span><span class="n">metric1_json</span><span class="p">,</span> <span class="n">metric2_json</span><span class="p">]</span>
+
+<span class="n">metrics_container_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">metrics_container</span><span class="p">)</span>
+
+<span class="c1"># Create a metric</span>
+<span class="n">client</span><span class="o">.</span><span class="n">create_metric</span><span class="p">(</span><span class="n">metrics_container_json</span><span class="p">,</span> <span class="n">sensor_id</span><span class="p">)</span>
+
+<span class="c1"># Waiting for create metric to finish</span>
+<span class="k">while</span> <span class="n">metrics_created</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>describe_metric()</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">describe_metric</span><span class="p">(</span><span class="n">metric_id</span><span class="p">,</span> <span class="n">sensor_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns through the callback function a JSON object containing the metadata definition of the
+registered metric whose ID is passed to the function. This metric must belong to
+the sensor whose ID is also passed to the function.</p>
+<p><strong>- metric_id</strong></p>
+<p>The metric ID obtained when creating the metric.</p>
+<p><strong>- sensor_id</strong></p>
+<p>The sensor ID obtained when creating the sensor.</p>
+<p>delete_metric()</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">delete_metric</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">sensor_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Deletes the metrics whose IDs are passed to the function as a JSON. All metrics being deleted must
+belong to the same sensor whose ID is passed in the function as well. After deletion no updates are possible
+to the deleted metrics.</p>
+<p><strong>- msg</strong></p>
+<p>JSON containing metric IDs to be deleted.</p>
+<blockquote>
+<div><p><strong>Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;{</span><span class="se">\&quot;</span><span class="s2">metrics</span><span class="se">\&quot;</span><span class="s2">: [{</span><span class="se">\&quot;</span><span class="s2">metricId</span><span class="se">\&quot;</span><span class="s2"> : </span><span class="se">\&quot;</span><span class="s2">94c2c5e193bb437195368c08f0bd86ab</span><span class="se">\&quot;</span><span class="s2"> },</span>
+ <span class="p">{</span>\<span class="s2">&quot;metricId</span><span class="se">\&quot;</span><span class="s2"> : </span><span class="se">\&quot;</span><span class="s2">94c2c5e193bb437195368c08f0bd86ac</span><span class="se">\&quot;</span><span class="s2"> }] }&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>- sensor_id</strong></p>
+<p>The sensor ID obtained when creating the sensor.</p>
+</div>
+<div class="section" id="pushing-data-to-teamviewer-iot-agent">
+<span id="id7"></span><h3>Pushing data to TeamViewer IoT Agent<a class="headerlink" href="#pushing-data-to-teamviewer-iot-agent" title="Permalink to this headline">¶</a></h3>
+<p>push_metrics()</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">push_metrics</span><span class="p">(</span><span class="n">sensor_id</span><span class="p">,</span> <span class="n">metric_data</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Puts metric data in TeamViewer IoT Agent.</p>
+<p><strong>- sensor_id</strong></p>
+<p>The sensor ID obtained when creating the sensor.</p>
+<p><strong>- metric_data</strong></p>
+<p>JSON containing metric values.</p>
+<p><strong>- timestamp</strong></p>
+<div class="line-block">
+<div class="line">Time the data is sent for.</div>
+<div class="line">Optional parameter, data is displayed for realtime if the timestamp parameter is missing.</div>
+</div>
+<blockquote>
+<div><p><strong>Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;{ </span><span class="se">\&quot;</span><span class="s2">metrics</span><span class="se">\&quot;</span><span class="s2">: [ {</span><span class="se">\&quot;</span><span class="s2">value</span><span class="se">\&quot;</span><span class="s2"> : 21.5, </span><span class="se">\&quot;</span><span class="s2">metricId</span><span class="se">\&quot;</span><span class="s2"> : </span><span class="se">\&quot;</span><span class="s2">94c2c5e193bb437195368c08f0bd86ab</span><span class="se">\&quot;</span><span class="s2"> },</span>
+<span class="p">{</span>\<span class="s2">&quot;value</span><span class="se">\&quot;</span><span class="s2"> : 21.5, </span><span class="se">\&quot;</span><span class="s2">metricId</span><span class="se">\&quot;</span><span class="s2"> : </span><span class="se">\&quot;</span><span class="s2">94c2c5e193bb437195368c08f0bd86ac</span><span class="se">\&quot;</span><span class="s2"> } ], </span><span class="se">\&quot;</span><span class="s2">timestamp</span><span class="se">\&quot;</span><span class="s2"> : 1531736501248 }&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="callbacks">
+<span id="id8"></span><h3>Callbacks<a class="headerlink" href="#callbacks" title="Permalink to this headline">¶</a></h3>
+<p>Since the client establishes an asynchronous connection, callbacks need to be initialized for each method to receive
+responses from TeamViewer IoT Agent.</p>
+<div class="section" id="on-api-connect">
+<h4><a class="reference internal" href="#on-api-connect">on_api_connect()</a><a class="headerlink" href="#on-api-connect" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">on_api_connect</span><span class="p">(</span><span class="n">user_data</span><span class="p">,</span> <span class="n">error_str</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Called when a connection with TeamViewer IoT Agent is established.</p>
+<p><strong>- user_data</strong></p>
+<p>User defined data that will be passed to the user through the callbacks functions.</p>
+<p><strong>- error_str</strong></p>
+<p>MQTT error string describing the state of the connection.</p>
+<div class="line-block">
+<div class="line">0: Connection successful</div>
+<div class="line">1: Connection refused - incorrect protocol version</div>
+<div class="line">2: Connection refused - invalid client identifier</div>
+<div class="line">3: Connection refused - server unavailable</div>
+<div class="line">4: Connection refused - bad username or password</div>
+<div class="line">5: Connection refused - not authorized 6-255: Currently unused.</div>
+</div>
+<p><strong>- error_code</strong></p>
+<p>MQTT error codes describing the state of the connection.</p>
+<div class="line-block">
+<div class="line">0: Connection successful</div>
+<div class="line">1: Connection refused - incorrect protocol version</div>
+<div class="line">2: Connection refused - invalid client identifier</div>
+<div class="line">3: Connection refused - server unavailable</div>
+<div class="line">4: Connection refused - bad username or password</div>
+<div class="line">5: Connection refused - not authorized 6-255: Currently unused.</div>
+</div>
+<p><strong>Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Callback to be called when connecting securely</span>
+<span class="k">def</span> <span class="nf">on_connect</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Secure connection is established.&quot;</span><span class="p">)</span>
+    <span class="c1"># Setting the flag</span>
+    <span class="k">global</span> <span class="n">secure_connection_established</span>
+    <span class="n">secure_connection_established</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="c1"># Setting the callback to know when connected</span>
+<span class="n">client</span><span class="o">.</span><span class="n">on_api_connect</span> <span class="o">=</span> <span class="n">on_connect</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="on-api-response">
+<h4><a class="reference internal" href="#on-api-response">on_api_response()</a><a class="headerlink" href="#on-api-response" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">on_api_response</span><span class="p">(</span><span class="n">user_data</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Called when a message from TeamViewer IoT Agent is received.</p>
+<p><strong>- user_data</strong></p>
+<p>User defined data that will be passed to the user through the callbacks functions.</p>
+<p><strong>- msg</strong></p>
+<p>Message received from TeamViewer IoT Agent.</p>
+<p><strong>- error_code</strong></p>
+<div class="line-block">
+<div class="line">0: UnknownError</div>
+<div class="line">1: NoBackendConnection</div>
+<div class="line">2: NoLicence</div>
+<div class="line">3: InternalError</div>
+<div class="line">4: InvalidJson</div>
+<div class="line">5: JsonIsNotAObject</div>
+<div class="line">6: MissingParameter</div>
+<div class="line">7: ParameterIsNotAString</div>
+<div class="line">8: ParameterIsNotANumber</div>
+<div class="line">9: ParameterisNotABool</div>
+<div class="line">10: ParameterIsNotAnArray</div>
+<div class="line">11: ParameterIsNotAnInteger</div>
+<div class="line">12: UnknownValueUnit</div>
+<div class="line">13: UnknownMetricType</div>
+<div class="line">14: ValueUnitOrValueTypeHasToBeProvided</div>
+<div class="line">15: UnknownSensorId</div>
+<div class="line">16: UnknownMetricId</div>
+<div class="line">17: NoMetricsUpdated</div>
+<div class="line">18: ForbiddendAccess</div>
+<div class="line">19: OutOfRange</div>
+</div>
+</div>
+<div class="section" id="on-api-disconnect">
+<h4><a class="reference internal" href="#on-api-disconnect">on_api_disconnect()</a><a class="headerlink" href="#on-api-disconnect" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">on_api_disconnect</span><span class="p">(</span><span class="n">user_data</span><span class="p">,</span> <span class="n">error_str</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Called when the client gets disconnected. Parameters are the same as that of on_api_connect().</p>
+</div>
+<div class="section" id="on-api-error">
+<h4><a class="reference internal" href="#on-api-error">on_api_error()</a><a class="headerlink" href="#on-api-error" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">on_api_error</span><span class="p">(</span><span class="n">user_data</span><span class="p">,</span> <span class="n">error_str</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Called instead of initialized callback when TeamViewer IoT Agent replies with an error.
+To be called the callback must be initialized by the user.
+Parameters are the same as that of on_api_connect().</p>
+</div>
+<div class="section" id="on-api-log">
+<h4><a class="reference internal" href="#on-api-log">on_api_log()</a><a class="headerlink" href="#on-api-log" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">on_api_log</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Called on every log message while execution. Logging levels are not yet supported.
+Parameters are the same as that of on_api_connect().</p>
+</div>
+</div>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>This SDK is distributed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.</p>
+</div>
+<div class="section" id="support">
+<span id="id9"></span><h2>Support<a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h2>
+<p>Bugs and issues can be reported through issues section at <a class="reference external" href="https://github.com/landreasyan/teamviewer-iot-client-sdk-python/issues">https://github.com/landreasyan/teamviewer-iot-client-sdk-python/issues</a>.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">TeamViewer IoT SDK for Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, TeamViewer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      
+      |
+      <a href="_sources/README.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
